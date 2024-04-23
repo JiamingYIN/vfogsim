@@ -1,0 +1,15 @@
+# Simplified the Road Network
+netconvert --osm-files map.osm -o helsinki.net.xml --remove-edges.by-vclass tram,rail_urban,rail,rail_electric,rail_fast,ship,bicycle,pedestrian --remove-edges.by-type highway.track,highway.service --remove-edges.isolated
+
+# generate continous trips
+randomTrips.py -n helsinki.net.xml -o flows.xml --begin 0 --end 1 --period 1 --flows 20
+
+jtrrouter --flow-files=flows.xml --net-file=helsinki.net.xml --output-file=test.rou.xml --begin 0 --end 600 --accept-all-destinations
+
+generateContinuousRerouters.py -n helsinki.net.xml --end 600 -o rerouter.add.xml
+
+
+# convert the road network into a graph
+1) netconvert -s helsinki.net.xml --plain-output-prefix plain
+2) C:/Users/wenca/src/sumo-1.8.0/tools/xml/xml2csv.py plain.edg.xml
+3) C:/Users/wenca/src/sumo-1.8.0/tools/xml/xml2csv.py plain.nod.xml
