@@ -1,3 +1,13 @@
+
+This repo contains the Python code for training vehicular fog nodes using multi-agent reinforcement learning (MARL), and the environment is built in Ray RLlib.
+Check more details from: https://www.techrxiv.org/doi/full/10.36227/techrxiv.24184047.v2
+
+To get it running, you need to download the VFogSim Platform (OMNeT) from the following link:
+https://mobilecloud.aalto.fi/?page_id=1441
+
+More instructions are listed as follows:
+-------------------------------------------------------------------------  
+
 VFogSim (Omnetpp Version)
 
 1. Download and install sumo-1.8.0, omnetpp-5.6.2, inet-4.2.2, veins-5.2, and simu5g-1.1.0. If there is no /usr/bin/python, set a symbolic link to an existing python (2.7 tested)
