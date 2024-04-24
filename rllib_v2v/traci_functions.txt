@@ -1,0 +1,25 @@
+Traci functions used in RL-ODVFC
+----------------------------------
+Observations: 
+1) Current road segment and position of the VFNs and users
+traci.vehicle.subscribe(vehID, (tc.VAR_ROAD_ID, tc.VAR_LANEPOSITION))
+traci.vehicle.getSubscriptionResults(vehID)
+
+2) Real-time speed from detector 
+traci.inductionloop.getLastStepMeanSpeed(loopID)
+
+Action:
+1) Judge whether the VFN should take action
+current_route = traci.vehicle.getRoute(vehID)
+current_edge = traci.vehicle.getRoadID(vehID)
+if current_edge == current_route[-1]:
+	take action;
+
+2) Set the new edge for the VFNs
+traci.vehicle.changeTarget(vehID, edgeID)
+
+
+
+
+
+

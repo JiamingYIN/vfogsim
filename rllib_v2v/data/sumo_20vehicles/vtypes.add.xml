@@ -1,0 +1,4 @@
+<additional>
+    <vType id="vfn" color="1,0,0" maxSpeed="30"/>
+    <vType id="user" color="0,1,0"/>
+</additional>

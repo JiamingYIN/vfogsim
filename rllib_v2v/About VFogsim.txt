@@ -1,0 +1,100 @@
+VFogSim (Omnetpp Version)
+
+About this VM
+Username: vfogsim
+Password: 1234
+The VFogSim project and its dependency files are stored in /home/vfogsim/Documents. For the VM user, you can skip steps 1-4.
+--------------------------------------------------------------------------
+
+1. Download and install sumo-1.8.0, omnetpp-5.6.2, inet-4.2.2, veins-5.2, and simu5g-1.1.0. If there is no /usr/bin/python, set a symbolic link to an existing python (2.7 tested)
+   'ln -s /usr/bin/python2.7 /usr/bin/python'
+
+2. use file LtePhyUe.h instead of /simu5G/src/stack/phy/layer/LtePhyUe.h (to add the get_SINR function for cars and VFNs)
+   Copy LteNetworkConfigurator*(three files) into /simu5G/src/common/
+
+3. Install Gurobi-8.0.1 (for mac) or Gurobi-9.5.2 (for linux, tested with ubuntu 20.04.1)
+   Copy lib/libgurobi_g++4.2.a and libgurobi80.so (for mac) or lib/libgurobi_g++5.2.a and libgurobi95.so (for linux) into veins-inet/src
+   Click Project/Properties/OMNeT++/Makemake/src:makemake.../ click Options in Build.
+   Click Link and add "gurobi80" and "gurobi_g++4.2" (for max) or "gurobi95" and "gurobi_g++5.2" (for linux) in Additional libraries to link with:(-l option)
+
+   Click Project/Properties/ C/C++ General/Paths and Symbols/Includes
+   Add the include path of gurobi in the Assembly,GNU C,GNU C++
+
+4. move directory vfogsim to /simu5G/src/apps
+   move directory cars to /Simu5G/simulations/NR
+   
+-------------------------------------------------------------------------   
+
+   The directory vfogsim contains the functions of cars, VFNs, server and the scheduler algorithm.
+
+   /vfogsim/vfogsim_car.cc
+   /vfogsim/vfogsim_car.h
+   /vfogsim/vfogsim_car.ned
+
+   These three files define the operation of the cars.
+   Basically, the car receives three kinds of messages
+     - selfInfo message means it is time to send the information of cars to the server;
+     - Decision packet means the car receives the task decision of the server;
+     - Result packet means the car receives the task result of the VFN
+   The car sends two kinds of messages
+     - selfInfo message will be sent to itself each TTI as a timer
+     - Task_car packet will be sent to the allocated VFN
+
+
+   /vfogsim/vfogsim_vfn.cc
+   /vfogsim/vfogsim_vfn.h
+   /vfogsim/vfogsim_vfn.ned
+
+   These three files define the operation of the VFNs.
+   Basically, the VFN receives two kinds of messages
+     - selfInfo message means it is time to send the information of VFNs to the server;
+     - Task_car packet means the VFN receives the task of a car
+   The VFN sends two kinds of messages
+     - selfInfo message will be sent to itself each TTI as a timer
+     - Result packet will be sent to the car which sends the Task_car packet
+
+
+   /vfogsim/vfogsim_server.cc
+   /vfogsim/vfogsim_server.h
+   /vfogsim/vfogsim_server.ned
+   /vfogsim/scheduler.cc
+   /vfogsim/scheduler.h
+   /vfogsim/info.h
+
+   The first three files define the operation of the server.
+   Basically, the server receives three kinds of messages
+     - selfDealInfo message means it is time to begin the scheduler decision making;
+     - Info_car packet means the server receives the information of a car;
+     - Info_VFN packet means the server receives the information of a VFN;
+   The server sends two kinds of messages
+     - selfDealInfo message will be sent to itself each TTI as a timer
+     - Decision packet will be sent to the car to tell whether the task of a car is blocked or not.
+
+   The last three files define the network and computation scheduler which use gurobi.
+
+
+   /vfogsim/vfogsim_info.msg
+   /vfogsim/vfogsim_vfn_info.msg
+   /vfogsim/vfogsim_decison.msg
+   /vfogsim/vfogsim_task.msg
+
+   These four files define the packet parameters.
+
+
+   /cars/heterogenous*
+     These files are related to vehicle route in sumo
+   /cars/Highway.ned
+     This file determines the network topology
+   /cars/omnetpp.ini
+     This file is related to the configuration of the simulation
+     "*.veinsManager.updateInterval" control the update interval between sumo and omnetpp
+     "*.gNodeB_[*].mobility.initial*" control the location of the base station
+     "*.car[*].cellularNic.nrPhy.handoverLatency" control the migration latency of cars
+     "*.car[*].app[0].typename" control whether a car is a user or a VFN
+
+
+
+5. Start a terminal, run 'omnetpp' to start the OMNeT++ IDE, run '/home/vfogsim/Documents/veins-5.2/veins-veins-5.2/sumo-launchd.py -vv -c sumo' to connect OMNeT++ with SUMO via TraCI
+
+6. run the omnetpp.ini file under /Simu5G/simulations/NR/cars and choose the config VFogsim
+   By far, the operation log of cars,VFNs and server will be output into the log file defined in the /vfogsim/vfogsim_car/vfn/server.h
