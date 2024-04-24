@@ -5,6 +5,11 @@ Check more details from: https://www.techrxiv.org/doi/full/10.36227/techrxiv.241
 To get it running, you need to download the VFogSim Platform (OMNeT) from the following link:
 https://mobilecloud.aalto.fi/?page_id=1441
 
+![5G_V2X](https://github.com/JiamingYIN/vfogsim/assets/61701502/738a510c-8f18-465b-848c-516d041c3bf1)
+![omnet](https://github.com/JiamingYIN/vfogsim/assets/61701502/225fd684-4797-4c47-8a0d-f706fde653f5)
+![CAC](https://github.com/JiamingYIN/vfogsim/assets/61701502/174ebcb7-2518-4b06-903c-8680b839be6d)
+
+
 More instructions are listed as follows:
 -------------------------------------------------------------------------  
 
