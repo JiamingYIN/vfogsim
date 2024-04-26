@@ -1,3 +1,4 @@
+# About SUMO-Ray-VFogsim++
 
 This repo contains the Python code for training vehicular fog nodes using multi-agent reinforcement learning (MARL), and the environment is built in Ray RLlib.
 Check more details from: https://www.techrxiv.org/doi/full/10.36227/techrxiv.24184047.v2
@@ -5,10 +6,13 @@ Check more details from: https://www.techrxiv.org/doi/full/10.36227/techrxiv.241
 To get it running, you need to download the VFogSim Platform (OMNeT) from the following link:
 https://mobilecloud.aalto.fi/?page_id=1441
 
+The demonstration video is available at:
+https://www.youtube.com/watch?v=KjmwOsR4WEc
+
 ![5G_V2X](https://github.com/JiamingYIN/vfogsim/assets/61701502/738a510c-8f18-465b-848c-516d041c3bf1)
 
 
-More instructions are listed as follows:
+How to install:
 -------------------------------------------------------------------------  
 
 VFogSim (Omnetpp Version)
@@ -105,3 +109,59 @@ VFogSim (Omnetpp Version)
 
 6. run the omnetpp.ini file under /Simu5G/simulations/NR/cars and choose the config VFogsim
    By far, the operation log of cars,VFNs and server will be output into the log file defined in the /vfogsim/vfogsim_car/vfn/server.h
+
+
+User Manual of Ray-SUMO-VFogSim++    
+-----------------------In terminal------------------------------------
+<How to connect Veins with SUMO?>
+/home/vfogsim/Documents/veins-5.2/veins-veins-5.2/sumo-launchd.py -vv -c sumo
+(There should be something like "Listening on port 9999")
+
+<How to open OMNET++?>
+omnetpp
+(Then the OMNeT GUI should pop up)
+
+-----------------------In OMNeT IDE---------------------------------------
+<What shall I do if the project explorer is empty? (This happens when restart the VM unproperly)>
+Click "file/import/Existing Projects into Workspace", choose inet, veins, veins_inet(sub-directory of veins), simu5G in "Home/Documents"
+Build them properly according to the guid in veins and simu5G webpages, as well as "About VFogSim.txt"
+
+<How can I run the VFogSim++ simulation in OMNeT IDE?>
+Go to "simu5G/simulations/NR/cars/omnetpp.ini", click the run button (a green circle with a while triangle)
+Note: The line in "omnetpp.ini" should be commented: ned-path = ../..;../../../src;../../../../inet-4.2.2-src/inet4/src; ......
+
+<How can I check the VFogSim source file?>
+Go to "simu5G/src/apps/vfogsim"
+
+-----------------------In pycharm-----------------------------------------
+<How can I go the reinforcement learning directory?>
+cd /home/vfogsim/Documents/rllib_v2v
+
+<How to train the reinforcement learning model?>
+python3 train_centralized_critic_omnet_5agent.py
+Note: The python file can be replaced here
+1. When the route file changes, the new route file should be added to "test.lauchd.xml"; the "test.sumocfg" should be changed (both in simu5G/simulations/NR/cars)
+2. When the number of agents changes, the config file should be changed; the input size in "model.py" should be 30*N, where N is the number of agents. The "omnetpp.ini" file should also be changed. For example, for three agents:
+# assignment of VFN
+*.car[0..2].numApps = 1
+*.car[0..2].app[0].typename = "vfogsim_vfn"
+*.car[0..2].app[0].destAddress = "server"
+*.car[0..2].app[0].destPort = 3000
+*.car[0..2].app[*].localPort = 3000
+# assignment of user vehicles
+*.car[3..].numApps = 1
+*.car[3..].app[0].typename = "vfogsim_car"
+*.car[3..].app[0].destAddress = "server"
+*.car[3..].app[0].destPort = 3000
+*.car[3..].app[*].localPort = 3000
+
+<How to run OMNeT at the same time without OMNeT IDE?>
+bash run_omnet.sh
+Note: 1. This command should be entered after the python file runs (to reset timestep)
+2. The line in "omnetpp.ini" should be added: ned-path = ../..;../../../src;../../../../inet-4.2.2-src/inet4/src; ......
+
+<When the training is completed, how can we see the results?>
+tensorboard --logdir="/home/vfogsim/ray_results/<name of the folder>"
+
+
+
