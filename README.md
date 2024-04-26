@@ -1,7 +1,8 @@
 # About SUMO-Ray-VFogsim++
 
-This repo contains the Python code for training vehicular fog nodes using multi-agent reinforcement learning (MARL), and the environment is built in Ray RLlib.
+This repo contains the Python code for training on-demand vehicular fog computing (ODVFC) using multi-agent reinforcement learning (MARL), and the environment is built in Ray RLlib.
 Check more details from: https://www.techrxiv.org/doi/full/10.36227/techrxiv.24184047.v2
+The code contains the MARL environment, centralized learning algorithm, decentralized learning algorithm, and MARL algorithms, including multi-agent proximal policy optimization (MAPPO), QMIX, and multi-agent advantage actor critic (MAA2C).
 
 To get it running, you need to download the VFogSim Platform (OMNeT) from the following link:
 https://mobilecloud.aalto.fi/?page_id=1441
